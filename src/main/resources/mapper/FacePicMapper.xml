@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.facetocode.mapper.FacePicMapper">
+    <insert id="addPassInfo">
+
+    </insert>
+
+    <update id="updateHealthCode">
+        update healthCode SET `status` = #{status},updateTime = NOW()  WHERE userId = #{userId}
+    </update>
+
+
+    <select id="selectId" resultType="com.ming.facetocode.pojo.VO.UserInfoVO">
+        SELECT h.id as healthCodeId,h.`status`,u.* FROM `userInfo` u LEFT JOIN healthCode h ON h.userid = u.id
+        WHERE u.id = #{id}
+    </select>
+    <select id="selectRisk" resultType="com.ming.facetocode.pojo.DO.HighDO">
+        SELECT * FROM `high`
+        WHERE province = #{province} AND city = #{city} AND county = #{county}
+        AND DATE_SUB(CURDATE(),INTERVAL 7 DAY) &lt; createTime
+    </select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.facetocode.mapper.LoginMapper">
+
+    <insert id="addEmail">
+        INSERT INTO emailCode(email,code) VALUES (#{email},#{code})
+    </insert>
+    <delete id="deleteOther">
+        DELETE FROM emialCode WHERE email = #{email} AND code != #{code}
+    </delete>
+
+    <select id="seleteUserInfo" resultType="com.ming.facetocode.pojo.DO.AdminUserDO">
+        SELECT * FROM `adminUser`
+        where adminUser = ${adminUser}
+          and adminPassWord = ${adminPassWord}
+    </select>
+    <select id="selectCode" resultType="com.ming.facetocode.pojo.DO.EmailCode">
+        SELECT * FROM emialCode where email = #{email} ORDER BY id LIMIT 0,1
+    </select>
+
+</mapper>

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="/js/jquery.min.js"></script>
+    <title>Insert title here</title>
+</head>
+<body>
+<div>
+    <h1>上传照片测试</h1>
+    <input type="file" name="file" onchange="showImg(this)"><!--选择图片-->
+    <img id="getImg"/><!-- 选择后展示的图片 -->
+    <input class="" type="button" id="btnBut" name="上传" > <!-- 提交 -->
+</div>
+<script type="text/javascript">
+    function showImg(cell){//获取图片路径赋给img标签，从而展示出所选择的图片
+        document.getElementById('getImg').src= window.URL.createObjectURL(cell.files[0]);
+    }
+    function image2Base64(img) {//转base64的方法
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var dataURL = canvas.toDataURL("image/png");//规定图片是什么格式，image/格式
+        return dataURL;
+    }
+
+    $("#btnBut").click(function(){
+        var imgurl =$('#getImg')[0].src;//获取的图片路径
+        var img = new Image();
+        img.src=imgurl;
+        var base64 = image2Base64(img);
+        UploadPic(base64);
+    })
+
+    function UploadPic(base64) {
+        $.ajax({//把编号带到后台去
+            type : 'post',
+            url : 'java接口',
+            data:{'photo': base64},
+            success : function(data){//成功的事件
+
+            },
+            error : function(data){//失败的事件
+                alert(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

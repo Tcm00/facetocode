@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.facetocode.mapper.TripMapper">
+
+    <select id="selectIdCard" resultType="com.ming.facetocode.pojo.DO.TripInfoDO">
+        SELECT * FROM `userInfo` WHERE idCard = #{idCard}
+    </select>
+    <select id="selectTrip" resultType="com.ming.facetocode.pojo.DO.TripInfoDO">
+        SELECT * FROM tripInfo WHERE userId = #{userId} AND deleteTime is NULL
+        AND DATE_SUB(CURDATE(),INTERVAL 7 DAY) &lt; createTime ORDER BY createTime DESC
+
+    </select>
+</mapper>

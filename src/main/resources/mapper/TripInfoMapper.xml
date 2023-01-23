@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.facetocode.mapper.TripInfoMapper">
+
+
+    <select id="queryTripInfoByIdCard" resultType="com.ming.facetocode.pojo.VO.TripInfoVO">
+        SELECT tripInfo.id,city,area,name,idcard,age,sex,facePic
+        FROM `tripInfo`,userInfo
+        WHERE userInfo.`idCard` = #{idCard}
+        ORDER BY tripInfo.id DESC
+            LIMIT 0,${days}
+    </select>
+    <select id="queryTripInfoByName" resultType="com.ming.facetocode.pojo.VO.TripInfoVO">
+        SELECT tripInfo.id,city,area,name,idcard,age,sex,facePic
+        FROM `tripInfo`,userInfo
+        WHERE userInfo.`name` = #{name}
+        ORDER BY tripInfo.id DESC
+            LIMIT 0,${days}
+    </select>
+<!--<resultMap id="tripList" type="com.ming.facetocode.pojo.VO.TripInfoVO">-->
+<!--    <result property="id" column="id"/>-->
+<!--    <result property="name" column="name"/>-->
+<!--    <result property="phone" column="phone"/>-->
+<!--    <result property="idCard" column="idCard"/>-->
+<!--    <result property="age" column="age"/>-->
+<!--    <result property="facePic" column="facePic"/>-->
+<!--    <result property="img" column="img"/>-->
+<!--    <collection property="map" resultMap="getOne"/>-->
+<!--</resultMap>-->
+
+<!--<resultMap id="getOne" type="com.ming.facetocode.pojo.VO.TripInfoVO">-->
+<!--    <result column="province" property="province"/>-->
+<!--    <result column="city" property="city"/>-->
+<!--    <result column="area" property="area"/>-->
+<!--    <result column="createTime" property="createTime"/>-->
+<!--</resultMap>-->
+
+<select id="getOne"  resultType="com.ming.facetocode.pojo.VO.AddressVO">
+    SELECT province,city,area,createtime FROM tripInfo WHERE createtime LIKE #{date} AND userId = #{userId} ORDER BY createtime DESC
+</select>
+
+    <select id="getTrip"  resultType="com.ming.facetocode.pojo.VO.TripInfoVO">
+        SELECT u.id,u.`name`,u.phone,u.idCard,u.age,u.facePic,p.img,p.pcId  FROM userInfo u
+        LEFT JOIN tripInfo t ON u.id = t.userId
+        LEFT JOIN passInfo p ON u.id = p.userId
+        WHERE u.id = #{id}  and t.createTime like #{date} ORDER BY t.createTime DESC limit 0,1
+    </select>
+    <select id="getTripInfo" resultType="com.ming.facetocode.pojo.VO.TripInfoVO">
+        SELECT u.id,u.`name`,u.phone,u.idCard,u.age,u.facePic,p.img,p.pcId  FROM userInfo u
+        LEFT JOIN tripInfo t ON u.id = t.userId
+        LEFT JOIN passInfo p ON u.id = p.userId
+        WHERE u.id = #{id} and DATE_SUB(CURDATE(),INTERVAL 7 DAY) &lt; t.createTime ORDER BY t.createTime DESC
+    </select>
+
+</mapper>

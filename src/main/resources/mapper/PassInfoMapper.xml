@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.facetocode.mapper.PassInfoMapper">
+
+
+    <select id="selectUser" resultType="String">
+        SELECT id FROM `userInfo` WHERE idCard = #{idCard}
+    </select>
+    <select id="selectCode" resultType="com.ming.facetocode.pojo.DO.HealthCodeDO">
+        SELECT * FROM `healthCode` WHERE userId = #{userId}
+    </select>
+    <select id="selectRed" resultType="com.ming.facetocode.pojo.DO.PassInfoDO">
+        SELECT * FROM `passInfo` WHERE createTime LIKE #{date} ORDER BY sort,id desc
+    </select>
+
+    <select id="getCount" resultType="com.ming.facetocode.pojo.VO.GreenVO">
+        SELECT healthStatus as state ,COALESCE(id) as number
+        FROM passInfo WHERE createTime LIKE #{date} GROUP BY sort,healthStatus
+    </select>
+    <select id="getNow" resultType="com.ming.facetocode.pojo.VO.WuKongVO">
+        SELECT u.id,u.`name`,u.phone,code.`status`,pc.address,p.img,p.createTime,p.updateTime,p.deleteTime FROM passInfo p
+            LEFT JOIN userInfo u ON u.id = p.userId
+            LEFT JOIN pcInfo pc ON pc.pcId = p.pcId
+            LEFT JOIN healthCode code on code.userid = u.id
+            WHERE u.deleteTime is NULL
+            ORDER BY p.createTime DESC
+    </select>
+
+</mapper>
